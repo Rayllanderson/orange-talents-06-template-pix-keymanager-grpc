@@ -18,7 +18,6 @@ class BCBClientImp(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    @Post
     fun create(request: BCBCreatePixKeyRequest): BCBCreatePixKeyResponse {
         try {
             val response = client.registerPixKey(request)
