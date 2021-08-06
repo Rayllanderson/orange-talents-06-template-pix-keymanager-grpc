@@ -49,7 +49,7 @@ class KeyRegisterEndpoint(
 
         repository.save(pixKey)
 
-        logger.info("Chave pix criada com sucesso para o cliente ${request.clientId}! Id do pix ${pixKey.pixId}")
+        logger.info("Chave pix criada com sucesso para o cliente ${request.clientId}! Pix id ${pixKey.pixId}")
 
         responseObserver?.onNext(PixKeyResponse.newBuilder().setPixId(pixKey.pixId).build())
         responseObserver?.onCompleted()

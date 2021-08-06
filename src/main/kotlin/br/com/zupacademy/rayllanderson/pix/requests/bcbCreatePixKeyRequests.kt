@@ -1,16 +1,17 @@
 package br.com.zupacademy.rayllanderson.pix.requests
 
-import br.com.zupacademy.rayllanderson.AccountType
 import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.PixKeyRequest
+import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
+import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
 import br.com.zupacademy.rayllanderson.pix.responses.ERPItauResponse
 import java.util.*
 
 class BCBCreatePixKeyRequest(
     val keyType: KeyType,
     key: String,
-    val bankAccount: BCBBankAccountRequest,
-    val owner: BCBOwnerRequest,
+    val bankAccount: BCBBankAccountDto,
+    val owner: BCBOwnerDto,
 ) {
     var key = key
         private set
@@ -33,56 +34,24 @@ class BCBCreatePixKeyRequest(
             return BCBCreatePixKeyRequest(
                 request.keyType,
                 request.key,
-                BCBBankAccountRequest.fromERPItauResponse(clientItauResponse),
-                BCBOwnerRequest.fromERPItauResponse(clientItauResponse)
+                BCBBankAccountDto.fromERPItauResponse(clientItauResponse),
+                BCBOwnerDto.fromERPItauResponse(clientItauResponse)
             )
         }
     }
-}
 
-data class BCBBankAccountRequest(
-    val participant: String,
-    val branch: String,
-    val accountNumber: String,
-    val accountType: BCBAccountTypeRequest,
-) {
-    companion object {
-        fun fromERPItauResponse(erpItauResponse: ERPItauResponse): BCBBankAccountRequest {
-            return BCBBankAccountRequest(
-                erpItauResponse.getAccountIspb(),
-                erpItauResponse.branch,
-                erpItauResponse.accountNumber,
-                BCBAccountTypeRequest.fromAccountType(erpItauResponse.type)
-            )
-        }
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as BCBCreatePixKeyRequest
+
+        if (owner != other.owner) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return key.hashCode()
     }
 }
-
-data class BCBOwnerRequest(
-    val type: BCBOwnerTypeRequest,
-    val name: String,
-    val taxIdNumber: String,
-) {
-    companion object {
-        fun fromERPItauResponse(erpItauResponse: ERPItauResponse): BCBOwnerRequest {
-            return BCBOwnerRequest(BCBOwnerTypeRequest.NATURAL_PERSON,
-                erpItauResponse.getOwnerName(),
-                erpItauResponse.getOwnerCpf())
-        }
-    }
-}
-
-enum class BCBOwnerTypeRequest {
-    NATURAL_PERSON, LEGAL_PERSON
-}
-
-enum class BCBAccountTypeRequest {
-    CACC, SVGS;
-
-    companion object {
-        fun fromAccountType(accountType: AccountType): BCBAccountTypeRequest {
-            return if (accountType == AccountType.CONTA_CORRENTE) CACC else SVGS
-        }
-    }
-}
-
