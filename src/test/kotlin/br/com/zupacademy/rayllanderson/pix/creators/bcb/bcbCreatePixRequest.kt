@@ -25,7 +25,7 @@ fun createBcbPixRequestToBeSavedWithKeyRandom(
 ): BCBCreatePixKeyRequest {
     return BCBCreatePixKeyRequest(
         keyType,
-        "",
+        null,
         BCBBankAccountDto.fromERPItauResponse(clientItauResponse),
         BCBOwnerDto.fromERPItauResponse(clientItauResponse)
     )
