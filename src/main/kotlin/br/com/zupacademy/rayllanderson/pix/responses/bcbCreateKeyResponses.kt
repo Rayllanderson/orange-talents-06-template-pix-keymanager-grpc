@@ -13,11 +13,11 @@ data class BCBCreatePixKeyResponse(
     val owner: BCBOwnerDto,
     val createdAt: LocalDateTime,
 ) {
-    fun toPixKey(clientId: String): PixKey {
+    fun toPixKey(clientId: String, institutionName: String): PixKey {
         return PixKey(
             this.key,
             this.keyType,
-            this.bankAccount.toBankAccount(),
+            this.bankAccount.toBankAccount(institutionName),
             this.owner.toOwner(clientId),
             this.createdAt
         )

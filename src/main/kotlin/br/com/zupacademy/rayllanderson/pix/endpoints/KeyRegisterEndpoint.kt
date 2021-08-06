@@ -45,7 +45,10 @@ class KeyRegisterEndpoint(
 
         val bcbResponse = bcbClient.createKey(bcbRequest)
 
-        val pixKey = bcbResponse.toPixKey(clientId = clientItauResponse.getOwnerId())
+        val pixKey = bcbResponse.toPixKey(
+            clientId = clientItauResponse.getOwnerId(),
+            institutionName = clientItauResponse.getAccountName()
+        )
 
         repository.save(pixKey)
 

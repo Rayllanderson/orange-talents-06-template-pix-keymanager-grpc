@@ -9,6 +9,7 @@ import br.com.zupacademy.rayllanderson.pix.requests.BCBCreatePixKeyRequest
 import br.com.zupacademy.rayllanderson.pix.requests.BCBDeletePixKeyRequest
 import br.com.zupacademy.rayllanderson.pix.responses.BCBCreatePixKeyResponse
 import br.com.zupacademy.rayllanderson.pix.responses.BCBDeletePixKeyResponse
+import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyDetailsResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientResponseException
 import org.slf4j.LoggerFactory
@@ -62,6 +63,23 @@ class BCBClientImp(
                     throw InternalServerErrorException("Ocorreu um erro. Tente novamente mais tarde")
                 }
             }
+        }
+    }
+
+    fun findPixKeyDetails(key: String): BCBPixKeyDetailsResponse {
+        try {
+            val response = client.findPixKeyDetails(key)
+
+            if (response.status == HttpStatus.NOT_FOUND) {
+                logger.error("Não foi possível buscar chave pix no banco central. Chave pix não encontrada")
+                throw NotFoundException("Chave pix não encontrada")
+            }
+
+            return response.body()!!
+        } catch (e: HttpClientResponseException) {
+            logger.error("Erro buscando chave pix ao tentar se comunicar com o serviço do Banco Central." +
+                    "status = ${e.status}; mensagem = ${e.message} ")
+            throw InternalServerErrorException("Ocorreu um erro ao buscar chave pix. Tente novamente mais tarde")
         }
     }
 }

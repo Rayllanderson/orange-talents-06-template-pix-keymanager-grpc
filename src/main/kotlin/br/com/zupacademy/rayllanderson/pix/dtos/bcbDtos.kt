@@ -1,5 +1,6 @@
 package br.com.zupacademy.rayllanderson.pix.dtos
 
+import br.com.zupacademy.rayllanderson.PixKeyDetailsResponse
 import br.com.zupacademy.rayllanderson.pix.enums.BCBAccountType
 import br.com.zupacademy.rayllanderson.pix.enums.BCBOwnerType
 import br.com.zupacademy.rayllanderson.pix.model.BankAccount
@@ -25,13 +26,23 @@ data class BCBBankAccountDto(
         }
     }
 
-    fun toBankAccount(): BankAccount {
+    fun toBankAccount(institutionName: String): BankAccount {
         return BankAccount(
+            institutionName,
             this.participant,
             this.branch,
             this.accountNumber,
             this.accountType.modelAccountType,
         )
+    }
+
+    fun toPixKeyDetailsAccount(institutionName: String): PixKeyDetailsResponse.Account {
+        return PixKeyDetailsResponse.Account.newBuilder()
+            .setAccountType(this.accountType.modelAccountType)
+            .setBranch(this.branch)
+            .setName(institutionName)
+            .setNumber(this.accountNumber)
+            .build()
     }
 }
 

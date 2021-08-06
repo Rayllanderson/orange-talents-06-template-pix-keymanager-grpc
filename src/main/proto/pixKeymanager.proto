@@ -15,6 +15,10 @@ service PixDeleteKeyService {
   rpc delete (PixDeleteKeyRequest) returns (PixDeleteKeyResponse) {}
 }
 
+service FindPixKeyDetailsService {
+  rpc find (PixKeyDetailsRequest) returns (PixKeyDetailsResponse) {}
+}
+
 
 enum KeyType {
   UNKNOWN = 0;
@@ -49,4 +53,27 @@ message PixDeleteKeyRequest {
 message PixDeleteKeyResponse {
   string clientId = 1;
   string pixId = 2;
+}
+
+message PixKeyDetailsRequest {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message PixKeyDetailsResponse {
+  string clientId = 1;
+  string pixId = 2;
+  KeyType keyType = 3;
+  string key = 4;
+  string ownerName = 5;
+  string ownerCpf = 6;
+
+  message Account {
+    string name = 1;
+    string branch = 2;
+    string number = 3;
+    AccountType accountType = 4;
+  }
+
+  Account account = 7;
 }
