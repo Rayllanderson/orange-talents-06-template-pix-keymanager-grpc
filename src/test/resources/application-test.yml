@@ -1,4 +1,15 @@
 datasources:
   default:
-    url: jdbc:tc:postgresql:12:///postgres
-    driverClassName: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:h2:mem:testDb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: 'sa'
+    schema-generate: CREATE_DROP
+    dialect: H2
+jpa:
+  default:
+    properties:
+      hibernate:
+        hbm2ddl:
+          auto: update
+        show_sql: true
