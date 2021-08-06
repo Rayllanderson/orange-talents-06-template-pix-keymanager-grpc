@@ -4,12 +4,12 @@ import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
 import br.com.zupacademy.rayllanderson.pix.requests.BCBCreatePixKeyRequest
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
 
 fun createBcbPixRequestToBeSaved(
     keyType: KeyType,
     key: String,
-    clientItauResponse: ERPItauResponse,
+    clientItauResponse: ERPItauClientAccountResponse,
 ): BCBCreatePixKeyRequest {
     return BCBCreatePixKeyRequest(
         keyType,
@@ -21,7 +21,7 @@ fun createBcbPixRequestToBeSaved(
 
 fun createBcbPixRequestToBeSavedWithKeyRandom(
     keyType: KeyType,
-    clientItauResponse: ERPItauResponse,
+    clientItauResponse: ERPItauClientAccountResponse,
 ): BCBCreatePixKeyRequest {
     return BCBCreatePixKeyRequest(
         keyType,

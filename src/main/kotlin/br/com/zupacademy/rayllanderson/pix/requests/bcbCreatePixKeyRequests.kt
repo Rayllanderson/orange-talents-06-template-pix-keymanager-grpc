@@ -4,7 +4,7 @@ import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.PixKeyRequest
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
 import java.util.*
 
 class BCBCreatePixKeyRequest(
@@ -29,7 +29,7 @@ class BCBCreatePixKeyRequest(
     companion object {
         fun fromPixKeyRequestAndClientItauResponse(
             request: PixKeyRequest,
-            clientItauResponse: ERPItauResponse,
+            clientItauResponse: ERPItauClientAccountResponse,
         ): BCBCreatePixKeyRequest {
             return BCBCreatePixKeyRequest(
                 request.keyType,

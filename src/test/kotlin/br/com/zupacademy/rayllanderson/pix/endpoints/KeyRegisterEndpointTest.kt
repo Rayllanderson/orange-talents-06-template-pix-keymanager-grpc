@@ -4,6 +4,7 @@ import br.com.zupacademy.rayllanderson.AccountType
 import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.PixKeyRegisterServiceGrpc
 import br.com.zupacademy.rayllanderson.PixKeyRequest
+import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
 import br.com.zupacademy.rayllanderson.pix.clients.ERPItauClient
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBCBPixKeyResponseValid
@@ -14,7 +15,7 @@ import br.com.zupacademy.rayllanderson.pix.creators.model.createBankAccountValid
 import br.com.zupacademy.rayllanderson.pix.creators.model.createOwnerValid
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -138,9 +139,8 @@ internal class KeyRegisterEndpointTest(
                 .setKey("08018462104")
                 .build()
 
-            val httpResponse: HttpResponse<Any> = HttpResponse.status(HttpStatus.NOT_FOUND)
-            BDDMockito.`when`(itauClient.findById(pixToBeSaved.clientId, pixToBeSaved.accountType))
-                .thenThrow(HttpClientResponseException("erro", httpResponse))
+            BDDMockito.`when`(itauClient.findByIdAndAccountType(pixToBeSaved.clientId, pixToBeSaved.accountType))
+                .thenThrow(NotFoundException("Cliente não encontrado"))
 
             val error = assertThrows<StatusRuntimeException> {
                 grpcClient.register(pixToBeSaved)
@@ -164,7 +164,7 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             val httpResponse: HttpResponse<Any> = HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
-            BDDMockito.`when`(itauClient.findById(pixToBeSaved.clientId, pixToBeSaved.accountType))
+            BDDMockito.`when`(itauClient.findByIdAndAccountType(pixToBeSaved.clientId, pixToBeSaved.accountType))
                 .thenThrow(HttpClientResponseException("erro", httpResponse))
 
             val error = assertThrows<StatusRuntimeException> {
@@ -587,14 +587,14 @@ internal class KeyRegisterEndpointTest(
     }
 
 
-    fun mockItauClient(pixToBeSaved: PixKeyRequest): ERPItauResponse {
+    fun mockItauClient(pixToBeSaved: PixKeyRequest): ERPItauClientAccountResponse {
         val itauResponse = createItauResponseValid(pixToBeSaved.clientId, pixToBeSaved.accountType)
-        BDDMockito.`when`(itauClient.findById(pixToBeSaved.clientId, pixToBeSaved.accountType))
+        BDDMockito.`when`(itauClient.findByIdAndAccountType(pixToBeSaved.clientId, pixToBeSaved.accountType))
             .thenReturn(HttpResponse.ok(itauResponse))
         return itauResponse
     }
 
-    fun mockBcbClient(pixToBeSaved: PixKeyRequest, itauResponse: ERPItauResponse) {
+    fun mockBcbClient(pixToBeSaved: PixKeyRequest, itauResponse: ERPItauClientAccountResponse) {
         val bcbRequest = createBcbPixRequestToBeSaved(pixToBeSaved.keyType, pixToBeSaved.key, itauResponse)
         val expectedBcbResponse = createBCBPixKeyResponseValid(bcbRequest)
         BDDMockito.`when`(bcbClient.registerPixKey(bcbRequest)).thenReturn(HttpResponse.created(expectedBcbResponse))

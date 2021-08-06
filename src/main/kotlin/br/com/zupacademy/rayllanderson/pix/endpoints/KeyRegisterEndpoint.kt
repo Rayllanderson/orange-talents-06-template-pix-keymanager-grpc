@@ -43,7 +43,7 @@ class KeyRegisterEndpoint(
 
         val bcbRequest = BCBCreatePixKeyRequest.fromPixKeyRequestAndClientItauResponse(request, clientItauResponse)
 
-        val bcbResponse = bcbClient.create(bcbRequest)
+        val bcbResponse = bcbClient.createKey(bcbRequest)
 
         val pixKey = bcbResponse.toPixKey(clientId = clientItauResponse.getOwnerId())
 

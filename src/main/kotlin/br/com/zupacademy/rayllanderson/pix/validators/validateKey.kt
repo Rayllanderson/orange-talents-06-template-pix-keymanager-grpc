@@ -8,7 +8,7 @@ import java.lang.IllegalArgumentException
  * Verifica se a chave Pix está em um formato válido de acordo com o seu tipo.
  * @throws IllegalArgumentException Caso a chave não esteja em um formato válido
  */
-fun checkIfKeyIsFormatted(key: String, keyType: KeyType) {
+fun assertThatKeyIsFormatted(key: String, keyType: KeyType) {
     when (keyType) {
         CPF -> {
             val isNotValidCpf = !CpfValidator()(key)
@@ -29,7 +29,7 @@ fun checkIfKeyIsFormatted(key: String, keyType: KeyType) {
  * @param keyType para verificar se o tipo da chave não é random, que nesse caso, pode ser nula
  * @throws IllegalArgumentException Caso a chave seja blank ou null
  */
-fun checkIfKeyIsNull(key: String?, keyType: KeyType) {
+fun assertThatKeyIsNotNull(key: String?, keyType: KeyType) {
     val isNotRandomType = keyType != RANDOM
     if (key.isNullOrBlank() && isNotRandomType) throw IllegalArgumentException("Chave pix não pode ser nula ou vazia")
 }
