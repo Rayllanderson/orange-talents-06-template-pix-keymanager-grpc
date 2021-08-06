@@ -3,6 +3,7 @@ package br.com.zupacademy.rayllanderson.pix.endpoints
 import br.com.zupacademy.rayllanderson.PixDeleteKeyRequest
 import br.com.zupacademy.rayllanderson.PixDeleteKeyResponse
 import br.com.zupacademy.rayllanderson.PixDeleteKeyServiceGrpc
+import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
 import br.com.zupacademy.rayllanderson.pix.clients.impl.BCBClientImp
 import br.com.zupacademy.rayllanderson.pix.clients.impl.ERPItauClientImp
 import br.com.zupacademy.rayllanderson.pix.extensions.validate
@@ -27,9 +28,15 @@ class KeyDeleteEndpoint(
 
         logger.info("Nova tentativa de deleção de pix de id ${request!!.pixId} para o cliente ${request.clientId}")
 
+        val clientNotExists = !repository.existsByOwnerId(request.clientId)
+        if (clientNotExists) {
+            logger.info("Tentativa de deleção falhou, client id não existe")
+            throw NotFoundException("client id não existe")
+        }
+
         val pixKey: PixKey = repository.findById(request.pixId).orElseThrow {
             logger.info("Tentativa de deleção falhou, pix id não existe na base de dados")
-            IllegalArgumentException("pix id não existe")
+            NotFoundException("pix id não existe")
         }
 
         val keyNotBelongToClient = !pixKey.belongToThatClient(request.clientId)

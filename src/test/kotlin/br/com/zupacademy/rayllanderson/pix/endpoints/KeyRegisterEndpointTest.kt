@@ -140,7 +140,7 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             BDDMockito.`when`(itauClient.findByIdAndAccountType(pixToBeSaved.clientId, pixToBeSaved.accountType))
-                .thenThrow(NotFoundException("Cliente não encontrado"))
+                .thenReturn(HttpResponse.notFound())
 
             val error = assertThrows<StatusRuntimeException> {
                 grpcClient.register(pixToBeSaved)

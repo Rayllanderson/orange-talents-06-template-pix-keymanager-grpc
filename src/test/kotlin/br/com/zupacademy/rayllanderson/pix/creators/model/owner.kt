@@ -10,3 +10,11 @@ fun createOwnerValid(): Owner {
         "08062171618",
     )
 }
+
+fun createAnotherOwnerValid(): Owner {
+    return Owner(
+        UUID.randomUUID().toString(),
+        "Hayasaka Sama",
+        "07062171619",
+    )
+}
