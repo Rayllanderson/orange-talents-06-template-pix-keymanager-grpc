@@ -5,29 +5,16 @@ import br.com.zupacademy.rayllanderson.PixKeyRequest
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
 import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
-import java.util.*
 
 class BCBCreatePixKeyRequest(
     val keyType: KeyType,
-    key: String,
+    val key: String?,
     val bankAccount: BCBBankAccountDto,
     val owner: BCBOwnerDto,
 ) {
-    var key = key
-        private set
-
-    init {
-        if (keyType == KeyType.RANDOM) {
-            this.key = generateRandomKey()
-        }
-    }
-
-    private fun generateRandomKey(): String {
-        return UUID.randomUUID().toString()
-    }
 
     companion object {
-        fun fromPixKeyRequestAndClientItauResponse(
+        fun fromPixKeyRequestAndItauClientAccountResponse(
             request: PixKeyRequest,
             clientItauResponse: ERPItauClientAccountResponse,
         ): BCBCreatePixKeyRequest {
