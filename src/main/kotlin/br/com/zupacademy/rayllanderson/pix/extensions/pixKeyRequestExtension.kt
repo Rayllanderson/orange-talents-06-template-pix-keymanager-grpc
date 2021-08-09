@@ -8,12 +8,12 @@ fun PixKeyRequest?.validate() {
 
     if(this?.clientId.isNullOrBlank()) throw IllegalArgumentException("Cliente id não pode ser nulo")
 
-    checkIfKeyIsNull(this?.key, this!!.keyType)
+    assertThatKeyIsNotNull(this?.key, this!!.keyType)
     checkIfKeyIsGreaterThan77(this.key)
     checkIfKeyHasValueIfIsRandom(this.key, this.keyType)
 
     checkIfKeyTypeIsValid(this.keyType)
     checkIfAccountTypeIsValid(this.accountType)
 
-    checkIfKeyIsFormatted(this.key, this.keyType)
+    assertThatKeyIsFormatted(this.key, this.keyType)
 }

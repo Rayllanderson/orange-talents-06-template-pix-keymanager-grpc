@@ -35,4 +35,7 @@ class PixKey(
     @Id
     @Column(nullable = false, unique = true)
     val pixId: String = UUID.randomUUID().toString()
+
+    fun belongToThatClient(clientId: String): Boolean = this.owner.id == clientId
+
 }

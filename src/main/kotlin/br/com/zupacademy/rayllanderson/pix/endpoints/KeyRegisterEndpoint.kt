@@ -41,11 +41,14 @@ class KeyRegisterEndpoint(
 
         logger.info("Tentando criar chave pix no sistema do banco central...")
 
-        val bcbRequest = BCBCreatePixKeyRequest.fromPixKeyRequestAndClientItauResponse(request, clientItauResponse)
+        val bcbRequest = BCBCreatePixKeyRequest.fromPixKeyRequestAndItauClientAccountResponse(request, clientItauResponse)
 
-        val bcbResponse = bcbClient.create(bcbRequest)
+        val bcbResponse = bcbClient.createKey(bcbRequest)
 
-        val pixKey = bcbResponse.toPixKey(clientId = clientItauResponse.getOwnerId())
+        val pixKey = bcbResponse.toPixKey(
+            clientId = clientItauResponse.getOwnerId(),
+            institutionName = clientItauResponse.getAccountName()
+        )
 
         repository.save(pixKey)
 

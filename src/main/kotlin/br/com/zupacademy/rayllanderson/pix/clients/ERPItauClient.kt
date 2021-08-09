@@ -1,7 +1,8 @@
 package br.com.zupacademy.rayllanderson.pix.clients
 
 import br.com.zupacademy.rayllanderson.AccountType
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientResponse
 import io.micronaut.http.HttpResponse
 import io.micronaut.http.annotation.Get
 import io.micronaut.http.annotation.PathVariable
@@ -12,5 +13,8 @@ import io.micronaut.http.client.annotation.Client
 interface ERPItauClient {
 
     @Get("/{clientId}/contas")
-    fun findById(@PathVariable clientId: String, @QueryValue("tipo") accountType: AccountType): HttpResponse<ERPItauResponse>
+    fun findByIdAndAccountType(@PathVariable clientId: String, @QueryValue("tipo") accountType: AccountType): HttpResponse<ERPItauClientAccountResponse>
+
+    @Get("/{clientId}")
+    fun findById(@PathVariable clientId: String): HttpResponse<ERPItauClientResponse>
 }

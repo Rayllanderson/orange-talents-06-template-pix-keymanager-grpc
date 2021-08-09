@@ -12,14 +12,14 @@ internal class ValidateKeyTest {
         @Test
         fun `should do nothing when key is well formatted`() {
             val key = "01060464535"
-            checkIfKeyIsFormatted(key, KeyType.CPF)
+            assertThatKeyIsFormatted(key, KeyType.CPF)
         }
 
         @Test
         fun `should throw illegal argument exception when key contains letter`() {
             val key = "0106046453a"
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.CPF)
+                assertThatKeyIsFormatted(key, KeyType.CPF)
             }
         }
 
@@ -27,7 +27,7 @@ internal class ValidateKeyTest {
         fun `should throw illegal argument exception when key is not well formatted`() {
             val key = "0106046451243"
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.CPF)
+                assertThatKeyIsFormatted(key, KeyType.CPF)
             }
         }
     }
@@ -37,7 +37,7 @@ internal class ValidateKeyTest {
         @Test
         fun `should do nothing when key is well formatted`() {
             val key = "kaguya@sama.com"
-            checkIfKeyIsFormatted(key, KeyType.EMAIL)
+            assertThatKeyIsFormatted(key, KeyType.EMAIL)
         }
 
         @Test
@@ -45,7 +45,7 @@ internal class ValidateKeyTest {
             val key = ""
 
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.EMAIL)
+                assertThatKeyIsFormatted(key, KeyType.EMAIL)
             }
         }
 
@@ -54,7 +54,7 @@ internal class ValidateKeyTest {
             val key = "kaguya-sama.com"
 
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.EMAIL)
+                assertThatKeyIsFormatted(key, KeyType.EMAIL)
             }
         }
     }
@@ -64,7 +64,7 @@ internal class ValidateKeyTest {
         @Test
         fun `should do nothing when key is well formatted`() {
             val key = "+5598993635483"
-            checkIfKeyIsFormatted(key, KeyType.PHONE)
+            assertThatKeyIsFormatted(key, KeyType.PHONE)
         }
 
         @Test
@@ -72,7 +72,7 @@ internal class ValidateKeyTest {
             val key = "98993624963"
 
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.EMAIL)
+                assertThatKeyIsFormatted(key, KeyType.EMAIL)
             }
         }
 
@@ -80,7 +80,7 @@ internal class ValidateKeyTest {
         fun `should throw illegal argument exception when key contains letter`() {
             val key = "+559899363548A"
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsFormatted(key, KeyType.CPF)
+                assertThatKeyIsFormatted(key, KeyType.CPF)
             }
         }
     }
@@ -124,13 +124,13 @@ internal class ValidateKeyTest {
         @Test
         fun `should do nothing when key is not empty`() {
             val key = "kaguya@sama.com"
-            checkIfKeyIsNull(key, KeyType.EMAIL)
+            assertThatKeyIsNotNull(key, KeyType.EMAIL)
         }
 
         @Test
         fun `should do nothing when key is empty and key type is random`() {
             val key = ""
-            checkIfKeyIsNull(key, KeyType.RANDOM)
+            assertThatKeyIsNotNull(key, KeyType.RANDOM)
         }
 
         @Test
@@ -138,7 +138,7 @@ internal class ValidateKeyTest {
             val key = ""
 
             assertThrows<IllegalArgumentException> {
-                checkIfKeyIsNull(key, KeyType.PHONE)
+                assertThatKeyIsNotNull(key, KeyType.PHONE)
             }
         }
     }

@@ -3,7 +3,7 @@ package br.com.zupacademy.rayllanderson.pix.responses
 import br.com.zupacademy.rayllanderson.AccountType
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ERPItauResponse(
+data class ERPItauClientAccountResponse(
     @JsonProperty("tipo")
     val type: AccountType,
 

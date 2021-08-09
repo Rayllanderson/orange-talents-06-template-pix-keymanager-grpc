@@ -7,9 +7,24 @@ option objc_class_prefix = "HLW";
 
 package br.com.zupacademy.rayllanderson;
 
+import "google/protobuf/timestamp.proto";
+
 service PixKeyRegisterService {
   rpc register (PixKeyRequest) returns (PixKeyResponse) {}
 }
+
+service PixDeleteKeyService {
+  rpc delete (PixDeleteKeyRequest) returns (PixDeleteKeyResponse) {}
+}
+
+service FindPixKeyDetailsService {
+  rpc find (PixKeyDetailsRequest) returns (PixKeyDetailsResponse) {}
+}
+
+service FindPixKeyListService {
+  rpc find (PixKeyListRequest) returns (PixKeyListResponse) {}
+}
+
 
 enum KeyType {
   UNKNOWN = 0;
@@ -34,4 +49,53 @@ message PixKeyRequest {
 
 message PixKeyResponse {
   string pixId = 1;
+}
+
+message PixDeleteKeyRequest {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message PixDeleteKeyResponse {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message PixKeyDetailsRequest {
+  string clientId = 1;
+  string pixId = 2;
+}
+
+message PixKeyDetailsResponse {
+  string clientId = 1;
+  string pixId = 2;
+  KeyType keyType = 3;
+  string key = 4;
+  string ownerName = 5;
+  string ownerCpf = 6;
+
+  message Account {
+    string name = 1;
+    string branch = 2;
+    string number = 3;
+    AccountType accountType = 4;
+  }
+
+  Account account = 7;
+}
+
+message PixKeyListRequest {
+  string clientId = 1;
+}
+
+message PixKeyListResponse {
+  message PixKey {
+    string clientId = 1;
+    string pixId = 2;
+    KeyType keyType = 3;
+    string key = 4;
+    AccountType accountType = 5;
+    google.protobuf.Timestamp createdAt = 6;
+  }
+  repeated PixKey keys = 1;
 }

@@ -9,6 +9,10 @@ import javax.validation.constraints.NotNull
 class BankAccount(
 
     @field:NotBlank
+    @Column(nullable = false, name = "bank_account_name")
+    val name: String,
+
+    @field:NotBlank
     @Column(nullable = false)
     val participant: String,
 
