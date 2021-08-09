@@ -46,6 +46,8 @@ class KeyDetailsEndpoint(
         logger.info("Buscando detalhes da chave pix no banco central...")
         val bcbResponse = bcbClient.findPixKeyDetails(pixKey.key)
 
+        logger.info("Busca realizada com sucesso")
+
         responseObserver?.onNext(bcbResponse.toPixKeyDetailsResponse(
             pixKey.bankAccount.name,
             request.clientId,

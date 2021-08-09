@@ -7,7 +7,6 @@ import br.com.zupacademy.rayllanderson.pix.clients.ERPItauClient
 import br.com.zupacademy.rayllanderson.pix.creators.itau.createItauAccountResponseValid
 import br.com.zupacademy.rayllanderson.pix.creators.model.createAnotherPixKeyToBeSaved
 import br.com.zupacademy.rayllanderson.pix.creators.model.createPixKeyToBeSaved
-import br.com.zupacademy.rayllanderson.pix.extensions.validate
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
 import br.com.zupacademy.rayllanderson.pix.requests.BCBDeletePixKeyRequest
@@ -31,7 +30,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.BDDMockito
 import org.mockito.Mockito
-import java.lang.IllegalArgumentException
 import java.time.LocalDateTime
 import javax.inject.Singleton
 
@@ -353,7 +351,7 @@ internal class KeyDeleteEndpointTest(
 }
 
 @Factory
-class Client {
+class KeyDeleteClient {
     @Singleton
     fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
             PixDeleteKeyServiceGrpc.PixDeleteKeyServiceBlockingStub {

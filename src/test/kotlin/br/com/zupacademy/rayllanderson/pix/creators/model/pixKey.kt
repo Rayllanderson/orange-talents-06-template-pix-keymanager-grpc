@@ -23,3 +23,13 @@ fun createAnotherPixKeyToBeSaved (): PixKey {
         createdAt = LocalDateTime.now()
     )
 }
+
+fun createPixKeyWithCPFToBeSaved (): PixKey {
+    return PixKey(
+        key = "06045394268",
+        keyType = KeyType.CPF,
+        bankAccount = createBankAccountValid(),
+        owner = createOwnerValid(),
+        createdAt = LocalDateTime.now()
+    )
+}

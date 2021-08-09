@@ -4,7 +4,6 @@ import br.com.zupacademy.rayllanderson.AccountType
 import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.PixKeyRegisterServiceGrpc
 import br.com.zupacademy.rayllanderson.PixKeyRequest
-import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
 import br.com.zupacademy.rayllanderson.pix.clients.ERPItauClient
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBCBPixKeyResponseValid
@@ -613,7 +612,7 @@ internal class KeyRegisterEndpointTest(
 }
 
 @Factory
-class Clients {
+class KeyRegisterClient {
     @Singleton
     fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
             PixKeyRegisterServiceGrpc.PixKeyRegisterServiceBlockingStub {

@@ -7,7 +7,8 @@ fun createBankAccountValid(): BankAccount {
     return BankAccount(
         "ITAÚ UNIBANCO S.A.",
         "60701190",
-        "607011545490",
+        "0001",
+        "60701190",
         AccountType.CONTA_CORRENTE
     )
 }
