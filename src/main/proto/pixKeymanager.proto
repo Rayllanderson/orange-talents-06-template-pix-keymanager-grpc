@@ -7,6 +7,8 @@ option objc_class_prefix = "HLW";
 
 package br.com.zupacademy.rayllanderson;
 
+import "google/protobuf/timestamp.proto";
+
 service PixKeyRegisterService {
   rpc register (PixKeyRequest) returns (PixKeyResponse) {}
 }
@@ -17,6 +19,10 @@ service PixDeleteKeyService {
 
 service FindPixKeyDetailsService {
   rpc find (PixKeyDetailsRequest) returns (PixKeyDetailsResponse) {}
+}
+
+service FindPixKeyListService {
+  rpc find (PixKeyListRequest) returns (PixKeyListResponse) {}
 }
 
 
@@ -76,4 +82,20 @@ message PixKeyDetailsResponse {
   }
 
   Account account = 7;
+}
+
+message PixKeyListRequest {
+  string clientId = 1;
+}
+
+message PixKeyListResponse {
+  message PixKey {
+    string clientId = 1;
+    string pixId = 2;
+    KeyType keyType = 3;
+    string key = 4;
+    AccountType accountType = 5;
+    google.protobuf.Timestamp createdAt = 6;
+  }
+  repeated PixKey keys = 1;
 }
