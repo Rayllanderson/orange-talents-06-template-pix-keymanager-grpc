@@ -28,12 +28,6 @@ class KeyListEndpoint(
 
         logger.info("Nova tentativa buscando lista de chave pix para o cliente ${request!!.clientId}")
 
-        val clientNotExists = !repository.existsByOwnerId(request.clientId)
-        if (clientNotExists) {
-            logger.info("Tentativa de busca falhou, client id não existe")
-            throw NotFoundException("cliente não encontrado")
-        }
-
         val clientId = request.clientId
         val keys = repository.findAllByOwnerId(clientId).map {
             PixKeyListResponse.PixKey.newBuilder()
