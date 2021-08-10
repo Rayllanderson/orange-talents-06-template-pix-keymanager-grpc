@@ -10,6 +10,7 @@ import br.com.zupacademy.rayllanderson.pix.creators.model.createPixKeyWithCPFToB
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
 import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyDetailsResponse
+import br.com.zupacademy.rayllanderson.pix.utils.LocalDateTimeConverter
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -62,6 +63,7 @@ internal class KeyDetailsEndpointTest(
         val expectedBankAccountBranch = savedKey.bankAccount.branch
         val expectedBankAccountType = savedKey.bankAccount.bankAccountType
         val expectedBankAccountNumber = savedKey.bankAccount.accountNumber
+        val expectedCreatedAt = LocalDateTimeConverter.toProtobufTimestamp(savedKey.createdAt)
 
 
         with(response) {
@@ -73,6 +75,7 @@ internal class KeyDetailsEndpointTest(
             assertEquals(expectedBankAccountBranch, account.branch)
             assertEquals(expectedBankAccountType, account.accountType)
             assertEquals(expectedBankAccountNumber, account.number)
+            assertEquals(expectedCreatedAt, createdAt)
         }
     }
 
