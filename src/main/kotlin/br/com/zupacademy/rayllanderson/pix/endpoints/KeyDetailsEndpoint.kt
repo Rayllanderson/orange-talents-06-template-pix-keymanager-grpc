@@ -1,14 +1,13 @@
 package br.com.zupacademy.rayllanderson.pix.endpoints
 
-import br.com.zupacademy.rayllanderson.*
+import br.com.zupacademy.rayllanderson.PixKeyDetailsRequest
+import br.com.zupacademy.rayllanderson.PixKeyDetailsResponse
+import br.com.zupacademy.rayllanderson.PixKeyFindDetailsServiceGrpc
 import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
-import br.com.zupacademy.rayllanderson.core.exceptions.PixKeyExistingException
-import br.com.zupacademy.rayllanderson.pix.clients.impl.ERPItauClientImp
 import br.com.zupacademy.rayllanderson.pix.clients.impl.BCBClientImp
 import br.com.zupacademy.rayllanderson.pix.extensions.validate
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
-import br.com.zupacademy.rayllanderson.pix.requests.BCBCreatePixKeyRequest
 import io.grpc.stub.StreamObserver
 import org.slf4j.LoggerFactory
 import javax.inject.Singleton
@@ -17,7 +16,7 @@ import javax.inject.Singleton
 class KeyDetailsEndpoint(
     private val repository: PixKeyRepository,
     private val bcbClient: BCBClientImp,
-) : FindPixKeyDetailsServiceGrpc.FindPixKeyDetailsServiceImplBase() {
+) : PixKeyFindDetailsServiceGrpc.PixKeyFindDetailsServiceImplBase() {
 
     private val logger = LoggerFactory.getLogger(KeyDetailsEndpoint::class.java)
 

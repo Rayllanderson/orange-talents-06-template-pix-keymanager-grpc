@@ -5,7 +5,7 @@ import br.com.zupacademy.rayllanderson.pix.enums.BCBAccountType
 import br.com.zupacademy.rayllanderson.pix.enums.BCBOwnerType
 import br.com.zupacademy.rayllanderson.pix.model.BankAccount
 import br.com.zupacademy.rayllanderson.pix.model.Owner
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ItauClientAccountResponse
 
 // Objetos válidos tanto para request, quanto para response
 
@@ -16,7 +16,7 @@ data class BCBBankAccountDto(
     val accountType: BCBAccountType,
 ) {
     companion object {
-        fun fromERPItauResponse(erpItauResponse: ERPItauClientAccountResponse): BCBBankAccountDto {
+        fun fromItauClientAccountResponse(erpItauResponse: ItauClientAccountResponse): BCBBankAccountDto {
             return BCBBankAccountDto(
                 erpItauResponse.getAccountIspb(),
                 erpItauResponse.branch,
@@ -52,7 +52,7 @@ data class BCBOwnerDto(
     val taxIdNumber: String,
 ) {
     companion object {
-        fun fromERPItauResponse(erpItauResponse: ERPItauClientAccountResponse): BCBOwnerDto {
+        fun fromERPItauResponse(erpItauResponse: ItauClientAccountResponse): BCBOwnerDto {
             return BCBOwnerDto(BCBOwnerType.NATURAL_PERSON,
                 erpItauResponse.getOwnerName(),
                 erpItauResponse.getOwnerCpf())

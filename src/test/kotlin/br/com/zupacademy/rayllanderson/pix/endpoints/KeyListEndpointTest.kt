@@ -1,6 +1,6 @@
 package br.com.zupacademy.rayllanderson.pix.endpoints
 
-import br.com.zupacademy.rayllanderson.FindPixKeyListServiceGrpc
+import br.com.zupacademy.rayllanderson.PixKeyFindListServiceGrpc
 import br.com.zupacademy.rayllanderson.PixKeyListRequest
 import br.com.zupacademy.rayllanderson.pix.creators.model.createAnotherPixKeyToBeSaved
 import br.com.zupacademy.rayllanderson.pix.creators.model.createPixKeyToBeSaved
@@ -14,7 +14,7 @@ import io.micronaut.context.annotation.Factory
 import io.micronaut.grpc.annotation.GrpcChannel
 import io.micronaut.grpc.server.GrpcServerChannel
 import io.micronaut.test.extensions.junit5.annotation.MicronautTest
-import org.assertj.core.api.Assertions.*
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -24,7 +24,7 @@ import javax.inject.Singleton
 @MicronautTest(transactional = false)
 internal class KeyListEndpointTest(
     val repository: PixKeyRepository,
-    val grpcClient: FindPixKeyListServiceGrpc.FindPixKeyListServiceBlockingStub,
+    val grpcClient: PixKeyFindListServiceGrpc.PixKeyFindListServiceBlockingStub,
 ) {
 
     @BeforeEach
@@ -136,10 +136,8 @@ internal class KeyListEndpointTest(
     @Factory
     class KeyListClient {
         @Singleton
-        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-                FindPixKeyListServiceGrpc.FindPixKeyListServiceBlockingStub {
-            return FindPixKeyListServiceGrpc.newBlockingStub(channel)
-        }
+        fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel) =
+            PixKeyFindListServiceGrpc.newBlockingStub(channel)
     }
 
 }

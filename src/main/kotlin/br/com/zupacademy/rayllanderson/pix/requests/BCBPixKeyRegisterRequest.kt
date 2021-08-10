@@ -1,12 +1,12 @@
 package br.com.zupacademy.rayllanderson.pix.requests
 
 import br.com.zupacademy.rayllanderson.KeyType
-import br.com.zupacademy.rayllanderson.PixKeyRequest
+import br.com.zupacademy.rayllanderson.PixKeyRegisterRequest
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ItauClientAccountResponse
 
-class BCBCreatePixKeyRequest(
+class BCBPixKeyRegisterRequest(
     val keyType: KeyType,
     val key: String?,
     val bankAccount: BCBBankAccountDto,
@@ -14,14 +14,14 @@ class BCBCreatePixKeyRequest(
 ) {
 
     companion object {
-        fun fromPixKeyRequestAndItauClientAccountResponse(
-            request: PixKeyRequest,
-            clientItauResponse: ERPItauClientAccountResponse,
-        ): BCBCreatePixKeyRequest {
-            return BCBCreatePixKeyRequest(
+        fun new(
+            request: PixKeyRegisterRequest,
+            clientItauResponse: ItauClientAccountResponse,
+        ): BCBPixKeyRegisterRequest {
+            return BCBPixKeyRegisterRequest(
                 request.keyType,
                 request.key,
-                BCBBankAccountDto.fromERPItauResponse(clientItauResponse),
+                BCBBankAccountDto.fromItauClientAccountResponse(clientItauResponse),
                 BCBOwnerDto.fromERPItauResponse(clientItauResponse)
             )
         }
@@ -31,7 +31,7 @@ class BCBCreatePixKeyRequest(
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
 
-        other as BCBCreatePixKeyRequest
+        other as BCBPixKeyRegisterRequest
 
         if (owner != other.owner) return false
 

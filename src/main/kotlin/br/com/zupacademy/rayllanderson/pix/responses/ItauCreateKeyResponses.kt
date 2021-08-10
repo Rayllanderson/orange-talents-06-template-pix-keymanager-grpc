@@ -3,12 +3,12 @@ package br.com.zupacademy.rayllanderson.pix.responses
 import br.com.zupacademy.rayllanderson.AccountType
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ERPItauClientAccountResponse(
+data class ItauClientAccountResponse(
     @JsonProperty("tipo")
     val type: AccountType,
 
     @JsonProperty("instituicao")
-    val bankAccountResponse: ERPItauAccountResponse,
+    val bankAccountResponse: ItauAccountResponse,
 
     @JsonProperty("agencia")
     val branch: String,
@@ -17,7 +17,7 @@ data class ERPItauClientAccountResponse(
     val accountNumber: String,
 
     @JsonProperty("titular")
-    val owner: ERPItauOwnerResponse,
+    val owner: ItauOwnerResponse,
 ) {
     fun getAccountName(): String {
         return this.bankAccountResponse.bankAccountName
@@ -40,7 +40,7 @@ data class ERPItauClientAccountResponse(
     }
 }
 
-data class ERPItauAccountResponse(
+data class ItauAccountResponse(
 
     @JsonProperty("nome")
     val bankAccountName: String,
@@ -49,7 +49,7 @@ data class ERPItauAccountResponse(
     val bankAccountIspb: String,
 )
 
-data class ERPItauOwnerResponse(
+data class ItauOwnerResponse(
     val id: String,
     val cpf: String,
     @JsonProperty("nome")

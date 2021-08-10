@@ -2,10 +2,10 @@ package br.com.zupacademy.rayllanderson.pix.endpoints
 
 import br.com.zupacademy.rayllanderson.AccountType
 import br.com.zupacademy.rayllanderson.KeyType
+import br.com.zupacademy.rayllanderson.PixKeyRegisterRequest
 import br.com.zupacademy.rayllanderson.PixKeyRegisterServiceGrpc
-import br.com.zupacademy.rayllanderson.PixKeyRequest
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
-import br.com.zupacademy.rayllanderson.pix.clients.ERPItauClient
+import br.com.zupacademy.rayllanderson.pix.clients.ItauClient
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBCBPixKeyResponseValid
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBcbPixRequestToBeSaved
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBcbPixRequestToBeSavedWithKeyRandom
@@ -14,7 +14,7 @@ import br.com.zupacademy.rayllanderson.pix.creators.model.createBankAccountValid
 import br.com.zupacademy.rayllanderson.pix.creators.model.createOwnerValid
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ItauClientAccountResponse
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -41,7 +41,7 @@ import javax.inject.Singleton
 internal class KeyRegisterEndpointTest(
     val repository: PixKeyRepository,
     val grpcClient: PixKeyRegisterServiceGrpc.PixKeyRegisterServiceBlockingStub,
-    val itauClient: ERPItauClient,
+    val itauClient: ItauClient,
     val bcbClient: BCBClient,
 ) {
 
@@ -56,7 +56,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when clientId is empty`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setKeyType(KeyType.CPF)
                 .setKey("08018462104")
                 .build()
@@ -75,7 +75,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when key is greater than 77 characters`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setKey("0".repeat(78))
@@ -108,7 +108,7 @@ internal class KeyRegisterEndpointTest(
                 savedPixKey = this.key
             }
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.CONTA_CORRENTE)
@@ -131,7 +131,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when itau client did not find the user`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.CONTA_POUPANCA)
@@ -155,7 +155,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when itau client is down`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.CONTA_POUPANCA)
@@ -180,7 +180,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when BCB client is down`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.CONTA_POUPANCA)
@@ -188,7 +188,7 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             // montando uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
             val bcbRequest = createBcbPixRequestToBeSaved(pixToBeSaved.keyType, pixToBeSaved.key, expectedItauResponse)
 
             val httpResponse: HttpResponse<Any> = HttpResponse.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -209,7 +209,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when key already exists in BCB client`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.CONTA_POUPANCA)
@@ -217,7 +217,7 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             // montando uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
             val bcbRequest = createBcbPixRequestToBeSaved(pixToBeSaved.keyType, pixToBeSaved.key, expectedItauResponse)
 
             val httpResponse: HttpResponse<Any> = HttpResponse.status(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -241,7 +241,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when account type is not setted`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setKey("08018462104")
@@ -261,7 +261,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when account type is not valid`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.CPF)
                 .setAccountType(AccountType.UNKNOWN_ACCOUNT)
@@ -282,7 +282,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when key type is not setted`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKey("08018462104")
@@ -302,7 +302,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when key type is not valid`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setKeyType(KeyType.UNKNOWN)
                 .setAccountType(AccountType.CONTA_CORRENTE)
@@ -328,7 +328,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `should create new pix key with cpf`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.CPF)
@@ -336,10 +336,10 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             // Mockando cliente itaú para uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
 
             // Mockando cliente Banco central para uma request válida
-            mockBcbClient(pixToBeSaved, expectedItauResponse)
+            mockBcbClientToValidRequest(pixToBeSaved, expectedItauResponse)
 
             val response = grpcClient.register(pixToBeSaved)
 
@@ -353,7 +353,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when cpf is invalid`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.CPF)
@@ -374,7 +374,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when cpf is empty`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.CPF)
@@ -398,7 +398,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `should create new pix key with phone`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.PHONE)
@@ -406,10 +406,10 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             // Mockando cliente itaú para uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
 
             // Mockando cliente Banco central para uma request válida
-            mockBcbClient(pixToBeSaved, expectedItauResponse)
+            mockBcbClientToValidRequest(pixToBeSaved, expectedItauResponse)
 
             val response = grpcClient.register(pixToBeSaved)
 
@@ -423,7 +423,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when phone is invalid`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.PHONE)
@@ -444,7 +444,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when phone is empty`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.PHONE)
@@ -468,7 +468,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `should create new pix key with email`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.EMAIL)
@@ -476,10 +476,10 @@ internal class KeyRegisterEndpointTest(
                 .build()
 
             // Mockando cliente itaú para uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
 
             // Mockando cliente Banco central para uma request válida
-            mockBcbClient(pixToBeSaved, expectedItauResponse)
+            mockBcbClientToValidRequest(pixToBeSaved, expectedItauResponse)
 
             val response = grpcClient.register(pixToBeSaved)
 
@@ -493,7 +493,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when email is invalid`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.EMAIL)
@@ -514,7 +514,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when email is empty`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.EMAIL)
@@ -538,14 +538,14 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `should create new pix key with random`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.RANDOM)
                 .build()
 
             // Mockando cliente itaú para uma request válida
-            val expectedItauResponse = mockItauClient(pixToBeSaved)
+            val expectedItauResponse = mockItauClientToValidRequest(pixToBeSaved)
 
             // Mockando cliente Banco central para uma request válida
             val bcbRequest = createBcbPixRequestToBeSavedWithKeyRandom(pixToBeSaved.keyType, expectedItauResponse)
@@ -565,7 +565,7 @@ internal class KeyRegisterEndpointTest(
         @Test
         fun `shouldn't create new pix key when type is random and key is present`() {
 
-            val pixToBeSaved = PixKeyRequest.newBuilder()
+            val pixToBeSaved = PixKeyRegisterRequest.newBuilder()
                 .setClientId(UUID.randomUUID().toString())
                 .setAccountType(AccountType.CONTA_CORRENTE)
                 .setKeyType(KeyType.RANDOM)
@@ -586,23 +586,23 @@ internal class KeyRegisterEndpointTest(
     }
 
 
-    fun mockItauClient(pixToBeSaved: PixKeyRequest): ERPItauClientAccountResponse {
+    fun mockItauClientToValidRequest(pixToBeSaved: PixKeyRegisterRequest): ItauClientAccountResponse {
         val itauResponse = createItauResponseValid(pixToBeSaved.clientId, pixToBeSaved.accountType)
         BDDMockito.`when`(itauClient.findByIdAndAccountType(pixToBeSaved.clientId, pixToBeSaved.accountType))
             .thenReturn(HttpResponse.ok(itauResponse))
         return itauResponse
     }
 
-    fun mockBcbClient(pixToBeSaved: PixKeyRequest, itauResponse: ERPItauClientAccountResponse) {
+    fun mockBcbClientToValidRequest(pixToBeSaved: PixKeyRegisterRequest, itauResponse: ItauClientAccountResponse) {
         val bcbRequest = createBcbPixRequestToBeSaved(pixToBeSaved.keyType, pixToBeSaved.key, itauResponse)
         val expectedBcbResponse = createBCBPixKeyResponseValid(bcbRequest)
         BDDMockito.`when`(bcbClient.registerPixKey(bcbRequest)).thenReturn(HttpResponse.created(expectedBcbResponse))
     }
 
 
-    @MockBean(ERPItauClient::class)
-    fun ERPItauClientMock(): ERPItauClient {
-        return Mockito.mock(ERPItauClient::class.java)
+    @MockBean(ItauClient::class)
+    fun itauClientMock(): ItauClient {
+        return Mockito.mock(ItauClient::class.java)
     }
 
     @MockBean(BCBClient::class)

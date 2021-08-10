@@ -5,10 +5,10 @@ import br.com.zupacademy.rayllanderson.core.exceptions.InternalServerErrorExcept
 import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
 import br.com.zupacademy.rayllanderson.core.exceptions.PixKeyExistingException
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
-import br.com.zupacademy.rayllanderson.pix.requests.BCBCreatePixKeyRequest
-import br.com.zupacademy.rayllanderson.pix.requests.BCBDeletePixKeyRequest
-import br.com.zupacademy.rayllanderson.pix.responses.BCBCreatePixKeyResponse
-import br.com.zupacademy.rayllanderson.pix.responses.BCBDeletePixKeyResponse
+import br.com.zupacademy.rayllanderson.pix.requests.BCBPixKeyRegisterRequest
+import br.com.zupacademy.rayllanderson.pix.requests.BCBPixKeyDeleteRequest
+import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyRegisterResponse
+import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyDeleteResponse
 import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyDetailsResponse
 import io.micronaut.http.HttpStatus
 import io.micronaut.http.client.exceptions.HttpClientResponseException
@@ -22,7 +22,7 @@ class BCBClientImp(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    fun createKey(request: BCBCreatePixKeyRequest): BCBCreatePixKeyResponse {
+    fun createKey(request: BCBPixKeyRegisterRequest): BCBPixKeyRegisterResponse {
         try {
             val response = client.registerPixKey(request)
             return response.body()!!
@@ -41,7 +41,7 @@ class BCBClientImp(
         }
     }
 
-    fun deleteKey(request: BCBDeletePixKeyRequest): BCBDeletePixKeyResponse {
+    fun deleteKey(request: BCBPixKeyDeleteRequest): BCBPixKeyDeleteResponse {
         try {
             val response = client.deletePixKey(request.key, request)
 
