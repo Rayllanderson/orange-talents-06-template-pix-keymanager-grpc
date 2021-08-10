@@ -4,7 +4,10 @@ import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.PixKeyDetailsResponse
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
+import br.com.zupacademy.rayllanderson.pix.utils.LocalDateTimeConverter
+import com.google.protobuf.Timestamp
 import java.time.LocalDateTime
+import java.time.ZoneId
 
 data class BCBPixKeyDetailsResponse(
     val keyType: KeyType,
@@ -22,6 +25,7 @@ data class BCBPixKeyDetailsResponse(
             .setKeyType(this.keyType)
             .setOwnerName(this.owner.name)
             .setOwnerCpf(this.owner.taxIdNumber)
+            .setCreatedAt(LocalDateTimeConverter.toProtobufTimestamp(createdAt))
             .build()
     }
 }

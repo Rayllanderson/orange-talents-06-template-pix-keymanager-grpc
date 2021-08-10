@@ -5,10 +5,9 @@ import br.com.zupacademy.rayllanderson.PixKeyListRequest
 import br.com.zupacademy.rayllanderson.PixKeyListResponse
 import br.com.zupacademy.rayllanderson.pix.extensions.validate
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
-import com.google.protobuf.Timestamp
+import br.com.zupacademy.rayllanderson.pix.utils.LocalDateTimeConverter
 import io.grpc.stub.StreamObserver
 import org.slf4j.LoggerFactory
-import java.time.ZoneId
 import javax.inject.Singleton
 
 @Singleton
@@ -31,14 +30,7 @@ class KeyListEndpoint(
                 .setKey(it.key)
                 .setKeyType(it.keyType)
                 .setAccountType(it.bankAccount.bankAccountType)
-                .setCreatedAt(it.createdAt.let { createdAt ->
-                    createdAt.atZone(ZoneId.of("UTC")).toInstant().let { instant ->
-                        Timestamp.newBuilder()
-                            .setSeconds(instant.epochSecond)
-                            .setNanos(instant.nano)
-                            .build()
-                    }
-                })
+                .setCreatedAt(LocalDateTimeConverter.toProtobufTimestamp(it.createdAt))
                 .build()
         }
 

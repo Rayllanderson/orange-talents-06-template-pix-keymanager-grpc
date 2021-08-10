@@ -82,6 +82,7 @@ message PixKeyDetailsResponse {
   }
 
   Account account = 7;
+  google.protobuf.Timestamp createdAt = 8;
 }
 
 message PixKeyListRequest {
