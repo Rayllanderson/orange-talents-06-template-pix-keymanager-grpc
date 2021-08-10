@@ -1,10 +1,9 @@
 package br.com.zupacademy.rayllanderson.pix.extensions
 
-import br.com.zupacademy.rayllanderson.PixKeyRequest
+import br.com.zupacademy.rayllanderson.PixKeyRegisterRequest
 import br.com.zupacademy.rayllanderson.pix.validators.*
-import java.lang.IllegalArgumentException
 
-fun PixKeyRequest?.validate() {
+fun PixKeyRegisterRequest?.validate() {
 
     if(this?.clientId.isNullOrBlank()) throw IllegalArgumentException("Cliente id não pode ser nulo")
 

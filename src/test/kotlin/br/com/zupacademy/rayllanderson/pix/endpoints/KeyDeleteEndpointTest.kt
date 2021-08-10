@@ -1,17 +1,17 @@
 package br.com.zupacademy.rayllanderson.pix.endpoints
 
-import br.com.zupacademy.rayllanderson.PixDeleteKeyRequest
-import br.com.zupacademy.rayllanderson.PixDeleteKeyServiceGrpc
+import br.com.zupacademy.rayllanderson.PixKeyDeleteRequest
+import br.com.zupacademy.rayllanderson.PixKeyDeleteServiceGrpc
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
-import br.com.zupacademy.rayllanderson.pix.clients.ERPItauClient
+import br.com.zupacademy.rayllanderson.pix.clients.ItauClient
 import br.com.zupacademy.rayllanderson.pix.creators.itau.createItauAccountResponseValid
 import br.com.zupacademy.rayllanderson.pix.creators.model.createAnotherPixKeyToBeSaved
 import br.com.zupacademy.rayllanderson.pix.creators.model.createPixKeyToBeSaved
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import br.com.zupacademy.rayllanderson.pix.repository.PixKeyRepository
-import br.com.zupacademy.rayllanderson.pix.requests.BCBDeletePixKeyRequest
-import br.com.zupacademy.rayllanderson.pix.responses.BCBDeletePixKeyResponse
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientResponse
+import br.com.zupacademy.rayllanderson.pix.requests.BCBPixKeyDeleteRequest
+import br.com.zupacademy.rayllanderson.pix.responses.BCBPixKeyDeleteResponse
+import br.com.zupacademy.rayllanderson.pix.responses.ItauClientDetailsResponse
 import io.grpc.ManagedChannel
 import io.grpc.Status
 import io.grpc.StatusRuntimeException
@@ -36,8 +36,8 @@ import javax.inject.Singleton
 @MicronautTest(transactional = false)
 internal class KeyDeleteEndpointTest(
     val repository: PixKeyRepository,
-    val grpcClient: PixDeleteKeyServiceGrpc.PixDeleteKeyServiceBlockingStub,
-    val itauClient: ERPItauClient,
+    val grpcClient: PixKeyDeleteServiceGrpc.PixKeyDeleteServiceBlockingStub,
+    val itauClient: ItauClient,
     val bcbClient: BCBClient,
 ) {
 
@@ -52,7 +52,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId(pixSaved.pixId)
             .build()
@@ -79,7 +79,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId("cliente-id-nao-existente")
             .setPixId(pixSaved.pixId)
             .build()
@@ -101,7 +101,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setPixId(pixSaved.pixId)
             .build()
 
@@ -122,7 +122,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .build()
 
@@ -143,7 +143,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId("key-que-nao-existe")
             .build()
@@ -168,7 +168,7 @@ internal class KeyDeleteEndpointTest(
         val hayasakaKey = repository.save(createAnotherPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(kaguyaKey.owner.id)
             .setPixId(hayasakaKey.pixId)
             .build()
@@ -191,7 +191,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId(pixSaved.pixId)
             .build()
@@ -217,7 +217,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId(pixSaved.pixId)
             .build()
@@ -244,7 +244,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId(pixSaved.pixId)
             .build()
@@ -255,7 +255,7 @@ internal class KeyDeleteEndpointTest(
 
         //motando request válida
         val key = pixSaved.key
-        val bcbRequest = BCBDeletePixKeyRequest(
+        val bcbRequest = BCBPixKeyDeleteRequest(
             key,
             createItauAccountResponseValid().bankAccountIspb
         )
@@ -281,7 +281,7 @@ internal class KeyDeleteEndpointTest(
         val pixSaved = repository.save(createPixKeyToBeSaved())
 
         //montar a request
-        val request = PixDeleteKeyRequest.newBuilder()
+        val request = PixKeyDeleteRequest.newBuilder()
             .setClientId(pixSaved.owner.id)
             .setPixId(pixSaved.pixId)
             .build()
@@ -292,7 +292,7 @@ internal class KeyDeleteEndpointTest(
 
         //motando request válida
         val key = pixSaved.key
-        val bcbRequest = BCBDeletePixKeyRequest(
+        val bcbRequest = BCBPixKeyDeleteRequest(
             key,
             createItauAccountResponseValid().bankAccountIspb
         )
@@ -316,7 +316,7 @@ internal class KeyDeleteEndpointTest(
     fun mockItauClientToValidDeleteRequest(pixSaved: PixKey) {
         val clientId = pixSaved.owner.id
         BDDMockito.`when`(itauClient.findById(clientId))
-            .thenReturn(HttpResponse.ok(ERPItauClientResponse(
+            .thenReturn(HttpResponse.ok(ItauClientDetailsResponse(
                 clientId,
                 pixSaved.owner.name,
                 pixSaved.owner.cpf,
@@ -327,11 +327,11 @@ internal class KeyDeleteEndpointTest(
     fun mockBcbClientToValidDeleteRequest(pixSaved: PixKey) {
         val key = pixSaved.key
         val participant = createItauAccountResponseValid().bankAccountIspb
-        BDDMockito.`when`(bcbClient.deletePixKey(pixSaved.key, BCBDeletePixKeyRequest(
+        BDDMockito.`when`(bcbClient.deletePixKey(pixSaved.key, BCBPixKeyDeleteRequest(
             key,
             participant
         ))).thenReturn(HttpResponse.ok(
-            BCBDeletePixKeyResponse(
+            BCBPixKeyDeleteResponse(
                 key,
                 participant,
                 LocalDateTime.now()
@@ -339,9 +339,9 @@ internal class KeyDeleteEndpointTest(
         ))
     }
 
-    @MockBean(ERPItauClient::class)
-    fun ERPItauClientMock(): ERPItauClient {
-        return Mockito.mock(ERPItauClient::class.java)
+    @MockBean(ItauClient::class)
+    fun itauClientMock(): ItauClient {
+        return Mockito.mock(ItauClient::class.java)
     }
 
     @MockBean(BCBClient::class)
@@ -353,8 +353,5 @@ internal class KeyDeleteEndpointTest(
 @Factory
 class KeyDeleteClient {
     @Singleton
-    fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-            PixDeleteKeyServiceGrpc.PixDeleteKeyServiceBlockingStub {
-        return PixDeleteKeyServiceGrpc.newBlockingStub(channel)
-    }
+    fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel) = PixKeyDeleteServiceGrpc.newBlockingStub(channel)
 }

@@ -10,18 +10,18 @@ package br.com.zupacademy.rayllanderson;
 import "google/protobuf/timestamp.proto";
 
 service PixKeyRegisterService {
-  rpc register (PixKeyRequest) returns (PixKeyResponse) {}
+  rpc register (PixKeyRegisterRequest) returns (PixKeyRegisterResponse) {}
 }
 
-service PixDeleteKeyService {
-  rpc delete (PixDeleteKeyRequest) returns (PixDeleteKeyResponse) {}
+service PixKeyDeleteService {
+  rpc delete (PixKeyDeleteRequest) returns (PixKeyDeleteResponse) {}
 }
 
-service FindPixKeyDetailsService {
+service PixKeyFindDetailsService {
   rpc find (PixKeyDetailsRequest) returns (PixKeyDetailsResponse) {}
 }
 
-service FindPixKeyListService {
+service PixKeyFindListService {
   rpc find (PixKeyListRequest) returns (PixKeyListResponse) {}
 }
 
@@ -40,23 +40,23 @@ enum AccountType {
   CONTA_POUPANCA = 2;
 }
 
-message PixKeyRequest {
+message PixKeyRegisterRequest {
   string clientId = 1;
   KeyType keyType = 2;
   string key = 3;
   AccountType accountType = 4;
 }
 
-message PixKeyResponse {
+message PixKeyRegisterResponse {
   string pixId = 1;
 }
 
-message PixDeleteKeyRequest {
+message PixKeyDeleteRequest {
   string clientId = 1;
   string pixId = 2;
 }
 
-message PixDeleteKeyResponse {
+message PixKeyDeleteResponse {
   string clientId = 1;
   string pixId = 2;
 }

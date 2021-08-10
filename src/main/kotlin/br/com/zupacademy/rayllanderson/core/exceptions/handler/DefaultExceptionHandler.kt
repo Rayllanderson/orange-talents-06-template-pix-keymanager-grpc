@@ -6,6 +6,7 @@ import br.com.zupacademy.rayllanderson.core.exceptions.NotFoundException
 import br.com.zupacademy.rayllanderson.core.exceptions.PixKeyExistingException
 import br.com.zupacademy.rayllanderson.core.exceptions.handler.ExceptionHandler.StatusWithDetails
 import io.grpc.Status
+import javax.validation.ConstraintViolationException
 
 /**
  * By design, this class must NOT be managed by Micronaut
@@ -15,6 +16,7 @@ class DefaultExceptionHandler : ExceptionHandler<Exception> {
     override fun handle(e: Exception): StatusWithDetails {
         val status = when (e) {
             is IllegalArgumentException -> Status.INVALID_ARGUMENT.withDescription(e.message)
+            is ConstraintViolationException -> Status.INVALID_ARGUMENT.withDescription(e.message)
             is PixKeyExistingException -> Status.ALREADY_EXISTS.withDescription(e.message)
             is NotFoundException -> Status.NOT_FOUND.withDescription(e.message)
             is ForbiddenException -> Status.PERMISSION_DENIED.withDescription(e.message)

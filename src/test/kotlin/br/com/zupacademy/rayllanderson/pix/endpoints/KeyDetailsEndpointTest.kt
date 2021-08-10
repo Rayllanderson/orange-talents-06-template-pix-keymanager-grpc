@@ -1,7 +1,7 @@
 package br.com.zupacademy.rayllanderson.pix.endpoints
 
-import br.com.zupacademy.rayllanderson.FindPixKeyDetailsServiceGrpc
 import br.com.zupacademy.rayllanderson.PixKeyDetailsRequest
+import br.com.zupacademy.rayllanderson.PixKeyFindDetailsServiceGrpc
 import br.com.zupacademy.rayllanderson.pix.clients.BCBClient
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.creators.bcb.createBCBOwnerDto
@@ -32,7 +32,7 @@ import javax.inject.Singleton
 @MicronautTest(transactional = false)
 internal class KeyDetailsEndpointTest(
     val repository: PixKeyRepository,
-    val grpcClient: FindPixKeyDetailsServiceGrpc.FindPixKeyDetailsServiceBlockingStub,
+    val grpcClient: PixKeyFindDetailsServiceGrpc.PixKeyFindDetailsServiceBlockingStub,
     val bcbClient: BCBClient,
 ) {
 
@@ -247,8 +247,5 @@ internal class KeyDetailsEndpointTest(
 @Factory
 class FindPixKeyClient {
     @Singleton
-    fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel):
-            FindPixKeyDetailsServiceGrpc.FindPixKeyDetailsServiceBlockingStub {
-        return FindPixKeyDetailsServiceGrpc.newBlockingStub(channel)
-    }
+    fun blockingStub(@GrpcChannel(GrpcServerChannel.NAME) channel: ManagedChannel) = PixKeyFindDetailsServiceGrpc.newBlockingStub(channel)
 }

@@ -3,30 +3,30 @@ package br.com.zupacademy.rayllanderson.pix.creators.bcb
 import br.com.zupacademy.rayllanderson.KeyType
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBBankAccountDto
 import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
-import br.com.zupacademy.rayllanderson.pix.requests.BCBCreatePixKeyRequest
-import br.com.zupacademy.rayllanderson.pix.responses.ERPItauClientAccountResponse
+import br.com.zupacademy.rayllanderson.pix.requests.BCBPixKeyRegisterRequest
+import br.com.zupacademy.rayllanderson.pix.responses.ItauClientAccountResponse
 
 fun createBcbPixRequestToBeSaved(
     keyType: KeyType,
     key: String,
-    clientItauResponse: ERPItauClientAccountResponse,
-): BCBCreatePixKeyRequest {
-    return BCBCreatePixKeyRequest(
+    clientItauResponse: ItauClientAccountResponse,
+): BCBPixKeyRegisterRequest {
+    return BCBPixKeyRegisterRequest(
         keyType,
         key,
-        BCBBankAccountDto.fromERPItauResponse(clientItauResponse),
+        BCBBankAccountDto.fromItauClientAccountResponse(clientItauResponse),
         BCBOwnerDto.fromERPItauResponse(clientItauResponse)
     )
 }
 
 fun createBcbPixRequestToBeSavedWithKeyRandom(
     keyType: KeyType,
-    clientItauResponse: ERPItauClientAccountResponse,
-): BCBCreatePixKeyRequest {
-    return BCBCreatePixKeyRequest(
+    clientItauResponse: ItauClientAccountResponse,
+): BCBPixKeyRegisterRequest {
+    return BCBPixKeyRegisterRequest(
         keyType,
         null,
-        BCBBankAccountDto.fromERPItauResponse(clientItauResponse),
+        BCBBankAccountDto.fromItauClientAccountResponse(clientItauResponse),
         BCBOwnerDto.fromERPItauResponse(clientItauResponse)
     )
 }

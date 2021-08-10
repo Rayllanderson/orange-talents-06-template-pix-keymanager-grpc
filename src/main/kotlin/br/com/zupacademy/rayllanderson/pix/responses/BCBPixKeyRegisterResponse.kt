@@ -6,7 +6,7 @@ import br.com.zupacademy.rayllanderson.pix.dtos.BCBOwnerDto
 import br.com.zupacademy.rayllanderson.pix.model.PixKey
 import java.time.LocalDateTime
 
-data class BCBCreatePixKeyResponse(
+data class BCBPixKeyRegisterResponse(
     val keyType: KeyType,
     val key: String,
     val bankAccount: BCBBankAccountDto,
