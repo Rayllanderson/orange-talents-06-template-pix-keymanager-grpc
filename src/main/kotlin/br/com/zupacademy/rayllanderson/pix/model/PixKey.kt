@@ -6,11 +6,13 @@ import java.util.*
 import javax.persistence.*
 import javax.validation.constraints.NotBlank
 import javax.validation.constraints.NotNull
+import javax.validation.constraints.Size
 
 @Entity
 class PixKey(
 
     @field:NotBlank
+    @field:Size(max = 77)
     @Column(nullable = false, unique = true)
     val key: String,
 

@@ -13,3 +13,5 @@ jpa:
         hbm2ddl:
           auto: update
         show_sql: true
+
+micronaut.server.port: ${random.port}
