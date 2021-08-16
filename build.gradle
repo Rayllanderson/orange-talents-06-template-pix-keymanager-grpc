@@ -16,6 +16,7 @@ repositories {
 }
 
 micronaut {
+    runtime("netty")
     testRuntime("junit5")
     processing {
         incremental(true)
@@ -41,6 +42,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.testcontainers:testcontainers")
     implementation("io.micronaut:micronaut-validation")
+    implementation("io.micronaut:micronaut-management")
 
     runtimeOnly("com.fasterxml.jackson.module:jackson-module-kotlin")
 
