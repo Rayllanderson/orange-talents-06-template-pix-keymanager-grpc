@@ -7,8 +7,9 @@ datasources:
     driverClassName: org.postgresql.Driver
     username: ${DB_USER:postgres}
     password: ${DB_PASS:12345}
+    dialect: ${DB_DIALECT:POSTGRES}
 
-jpa.default.properties.hibernate.hbm2ddl.auto: update
+jpa.default.properties.hibernate.hbm2ddl.auto: ${JPA_DLL_AUTO:update}
 
 micronaut.server.port: ${MICRONAUT_SERVER_PORT:8081}
 
