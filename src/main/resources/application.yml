@@ -3,10 +3,10 @@ micronaut:
     name: pixKeymanager
 datasources:
   default:
-    url: ${DB_URL:`jdbc:postgresql://localhost:5432/postgres`}
+    url: ${DB_URI:`jdbc:postgresql://localhost:5432/postgres`}
     driverClassName: org.postgresql.Driver
     username: ${DB_USER:postgres}
-    password: ${DB_PASS:12345}
+    password: ${DB_PASSWORD:12345}
     dialect: ${DB_DIALECT:POSTGRES}
 
 jpa.default.properties.hibernate.hbm2ddl.auto: ${JPA_DLL_AUTO:update}
@@ -22,5 +22,5 @@ endpoints:
     sensitive: ${HEALTH_SENSITIVE:false}
     details-visible: ${HEALTH_DETAILS_VISIBLE:ANONYMOUS}
 
-erp.itau.client.url: ${ERP_ITAU_CLIENT_URL:`http://localhost:9091/api/v1`}
-bcb.client.url: ${BCB_CLIENT_URL:`http://localhost:8082/api/v1`}
+erp.itau.client.url: ${ITAU_URL:`http://localhost:9091/api/v1`}
+bcb.client.url: ${BCB_URL:`http://localhost:8082/api/v1`}
