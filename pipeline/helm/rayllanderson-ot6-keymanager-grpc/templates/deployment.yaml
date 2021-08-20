@@ -34,17 +34,21 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
+            - name: grpc-server
               containerPort: 50051
+            - name: health-check
+              containerPort: 8085
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health/liveness
               port: 8085
+              scheme: HTTP
           readinessProbe:
             httpGet:
               path: /healh/readiness
               port: 8085
+              scheme: HTTP
           envFrom: 
             - configMapRef:
                 name: rayllanderson-ot6-keymanager-grpc-configmap
