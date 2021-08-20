@@ -47,9 +47,9 @@ spec:
               port: 8085
           envFrom: 
             - configMapRef:
-                name: orange-stack-pix-keymanager-grpc-configmap
+                name: rayllanderson-ot6-keymanager-grpc-configmap
             - secretRef:
-                name: orange-stack-pix-keymanager-grpc-secrets
+                name: rayllanderson-ot6-keymanager-grpc-secrets
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
