@@ -44,11 +44,13 @@ spec:
               path: /health/liveness
               port: 8085
               scheme: HTTP
+            initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /healh/readiness
               port: 8085
               scheme: HTTP
+            initialDelaySeconds: 60
           envFrom: 
             - configMapRef:
                 name: rayllanderson-ot6-keymanager-grpc-configmap
