@@ -8,8 +8,8 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: 50051
       protocol: TCP
-      name: http
+      name: grpc-server
   selector:
     {{- include "rayllanderson-pix-keymanager-grpc.selectorLabels" . | nindent 4 }}
