@@ -15,7 +15,6 @@ micronaut.server.port: ${MICRONAUT_SERVER_PORT:8081}
 
 endpoints:
   all:
-    port: ${HTTP_PORT:8085}
     sensitive: ${HTTP_SENSITIVE:true}
   health:
     enabled: ${HEALTH_ENABLED:true}
