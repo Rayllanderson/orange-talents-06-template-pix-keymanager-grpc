@@ -47,7 +47,7 @@ spec:
             initialDelaySeconds: 60
           readinessProbe:
             httpGet:
-              path: /healh/readiness
+              path: /health/readiness
               port: 8081
               scheme: HTTP
             initialDelaySeconds: 60
