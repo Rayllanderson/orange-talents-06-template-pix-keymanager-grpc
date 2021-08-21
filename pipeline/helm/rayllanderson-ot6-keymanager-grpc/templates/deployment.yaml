@@ -37,18 +37,18 @@ spec:
             - name: grpc-server
               containerPort: 50051
             - name: health-check
-              containerPort: 8085
+              containerPort: 8081
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /health/liveness
-              port: 8085
+              port: 8081
               scheme: HTTP
             initialDelaySeconds: 60
           readinessProbe:
             httpGet:
               path: /healh/readiness
-              port: 8085
+              port: 8081
               scheme: HTTP
             initialDelaySeconds: 60
           envFrom: 
